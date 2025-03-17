@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\JimAI.ico</ApplicationIcon>
+    <!--<PublishAot>true</PublishAot>-->
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\avalonia-logo.ico" />
+    <!--<None Remove="Assets\JimAI.ico" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\avalonia-logo.ico" />
+    <AvaloniaResource Include="Assets\JimAI.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.2.5" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="FreeSql" Version="3.5.107" />
+    <PackageReference Include="FreeSql.Provider.Sqlite" Version="3.5.107" />
+    <PackageReference Include="MarkdownAIRender" Version="0.1.16" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.40.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Ollama" Version="1.40.1-alpha" />
+    <PackageReference Include="RestSharp" Version="112.1.1-alpha.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\MainView.axaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <_DeploymentManifestIconFile Remove="Assets\JimAI.ico" />
+  </ItemGroup>
+</Project> 
