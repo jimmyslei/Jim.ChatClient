@@ -5,6 +5,7 @@
              xmlns:vm="using:chatClient.ViewModels"
              xmlns:models="using:chatClient.Models"
              xmlns:md="https://github.com/AIDotNet/Markdown.AIRender"
+             xmlns:views="using:chatClient.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="chatClient.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -13,27 +14,125 @@
   </Design.DataContext>
 
   <!-- 这里只能有一个根元素 -->
-  <Grid ColumnDefinitions="250,*">
-    <!-- 侧边栏 -->
+  <Grid ColumnDefinitions="Auto,250,*">
+    <!-- 左侧图标菜单栏 -->
     <Border Grid.Column="0" 
+            Background="#1E1E1E"
+            Width="60">
+      <StackPanel Margin="0,20,0,0" Spacing="20">
+        <!-- 聊天图标 -->
+        <ToggleButton Classes="IconButton" 
+                Background="Transparent"
+                HorizontalAlignment="Center"
+                Command="{Binding SwitchToViewCommand}" 
+                ToolTip.Tip="Chat聊天"
+                CommandParameter="Chat"
+                IsChecked="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Chat}">
+          <PathIcon Data="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M6,9H18V11H6M14,14H6V12H14M18,8H6V6H18" Width="24" Height="24" />
+          <!--<ToggleButton.Styles>
+            <Style Selector="ToggleButton.IconButton">
+              <Setter Property="Width" Value="48" />
+              <Setter Property="Height" Value="48" />
+              <Setter Property="Background" Value="Transparent" />
+              <Setter Property="BorderThickness" Value="0" />
+              <Setter Property="Padding" Value="12" />
+              <Setter Property="HorizontalAlignment" Value="Center" />
+              <Setter Property="CornerRadius" Value="8" />
+            </Style>
+            <Style Selector="ToggleButton.IconButton:pointerover /template/ ContentPresenter">
+              <Setter Property="Background" Value="#333333" />
+            </Style>
+            <Style Selector="ToggleButton.IconButton:checked /template/ ContentPresenter">
+              <Setter Property="Background" Value="#444444" />
+            </Style>
+            <Style Selector="PathIcon">
+              <Setter Property="Foreground" Value="White" />
+            </Style>
+          </ToggleButton.Styles>-->
+        </ToggleButton>
+        
+        <!-- 知识库图标 -->
+        <ToggleButton Classes="IconButton" 
+                Background="Transparent"
+                HorizontalAlignment="Center"
+                ToolTip.Tip="知识库"
+                Command="{Binding SwitchToViewCommand}" 
+                CommandParameter="KnowledgeBase"
+                IsChecked="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=KnowledgeBase}">
+          <PathIcon Data="M4,6H2V20A2,2 0 0,0 4,22H18V20H4V6M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,16H8V4H20V16M10,9H18V11H10V9M10,12H18V14H10V12M10,6H18V8H10V6Z" Width="24" Height="24" />
+        </ToggleButton>
+        
+        <!-- 翻译图标 -->
+        <ToggleButton Classes="IconButton" 
+                Background="Transparent"
+                HorizontalAlignment="Center"
+                ToolTip.Tip="翻译"
+                Command="{Binding SwitchToViewCommand}" 
+                CommandParameter="Translate"
+                IsChecked="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Translate}">
+          <PathIcon Data="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z" Width="24" Height="24" />
+        </ToggleButton>
+        
+        <!-- 设置图标 -->
+        <ToggleButton Classes="IconButton" 
+                Background="Transparent"
+                HorizontalAlignment="Center"
+                ToolTip.Tip="系统设置"
+                Command="{Binding SwitchToViewCommand}" 
+                CommandParameter="Settings"
+                IsChecked="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Settings}">
+          <PathIcon Data="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" Width="24" Height="24" />
+        </ToggleButton>
+      </StackPanel>
+    </Border>
+    
+    <!-- 侧边栏 -->
+    <Border Grid.Column="1" 
             Background="#2D2D2D"
-            Padding="10">
-      <Grid RowDefinitions="Auto,*,Auto">
-        <!-- 新对话按钮 -->
-        <Button Grid.Row="0"
-                Content="开始新对话"
-                Command="{Binding ClearChatCommand}"
-                HorizontalAlignment="Stretch"
-                Padding="10"
-                Margin="0,0,0,10"
-                Background="#4285F4"
-                Foreground="White"
-                CornerRadius="8"/>
+            Padding="10"
+            IsVisible="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Chat}"> 
+      <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <!-- 新对话按钮和知识库按钮并排 -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+          <Button Grid.Column="0"
+                  Content="开始新对话"
+                  Command="{Binding ClearChatCommand}"
+                  HorizontalAlignment="Stretch"
+                  Padding="10"
+                  Margin="0,0,5,0"
+                  Background="#4285F4"
+                  Foreground="White"
+                  CornerRadius="8"/>
+                  
+          <!--<Button Grid.Column="1"
+                  Content="知识库"
+                  Command="{Binding CreateKnowledgeBaseDialogCommand}"
+                  Padding="10"
+                  Background="#2D8CFF"
+                  Foreground="White"
+                  CornerRadius="8"/>-->
+        </Grid>
+        
+        <!-- 知识库视图 - 使用单独的行 -->
+        <Expander Grid.Row="1" 
+                  Header="知识库" 
+                  IsExpanded="False" 
+                  Margin="0,0,0,10"
+                  Background="#333333"
+                  BorderBrush="#444444"
+                  BorderThickness="1"
+                  CornerRadius="4">
+          <ScrollViewer MaxHeight="200" 
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled">
+            <views:KnowledgeBaseView DataContext="{Binding}" />
+          </ScrollViewer>
+        </Expander>
         
         <!-- 历史记录列表 -->
-        <ListBox Grid.Row="1"
+        <ListBox Grid.Row="2"
                  Background="Transparent"
-                 Margin="0,10"
+                 Margin="0,0,0,10"
                  ItemsSource="{Binding ChatSessions}"
                  SelectedItem="{Binding SelectedSession}"
                  SelectionChanged="ListBox_SelectionChanged">
@@ -53,7 +152,7 @@
         </ListBox>
         
         <!-- 底部信息 -->
-        <StackPanel Grid.Row="2" Margin="0,10,0,0">
+        <StackPanel Grid.Row="3" Margin="0,0,0,0">
           <TextBlock Text="Jim AI" Foreground="White" HorizontalAlignment="Center"/>
           <TextBlock Text="版本 1.0.0" Foreground="Gray" FontSize="12" HorizontalAlignment="Center"/>
         </StackPanel>
@@ -61,7 +160,7 @@
     </Border>
     
     <!-- 聊天区域 -->
-    <Grid Grid.Column="1" RowDefinitions="*,Auto,Auto">
+    <Grid Grid.Column="2" RowDefinitions="*,Auto,Auto" IsVisible="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Chat}">
       <!-- 聊天历史区域 -->
       <ScrollViewer Grid.Row="0" 
                     Name="ChatScrollViewer"
@@ -165,7 +264,7 @@
               CornerRadius="8"
               BorderBrush="#DDDDDD"
               BorderThickness="1">
-        <Grid ColumnDefinitions="Auto,*">
+        <Grid ColumnDefinitions="Auto,*,Auto">
           <TextBlock Grid.Column="0" 
                      Text="选择模型："
                      VerticalAlignment="Center"
@@ -173,9 +272,8 @@
           <ComboBox Grid.Column="1"
                     ItemsSource="{Binding AvailableModels}"
                     SelectedItem="{Binding SelectedModel}"
-                    Width="480"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Left">
+                    HorizontalAlignment="Stretch">
             <ComboBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Text="{Binding DisplayName}"/>
@@ -262,6 +360,29 @@
                      Foreground="White"
                      TextAlignment="Center"/>
       </Border>
+    </Grid>
+    
+    <!-- 知识库视图 -->
+    <Grid Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=KnowledgeBase}">
+      <views:KnowledgeBaseView DataContext="{Binding}" />
+    </Grid>
+    
+    <!-- 翻译视图 -->
+    <Grid Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Translate}">
+      <TextBlock Text="翻译功能正在开发中..." 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontSize="20" 
+                 Foreground="#888888"/>
+    </Grid>
+    
+    <!-- 设置视图 -->
+    <Grid Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Settings}">
+      <TextBlock Text="设置功能正在开发中..." 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontSize="20" 
+                 Foreground="#888888"/>
     </Grid>
   </Grid>
 </UserControl> 

@@ -14,5 +14,6 @@
     <converters:RoleToDisplayNameConverter x:Key="RoleToDisplayNameConverter"/>
     <converters:RoleIsAssistantConverter x:Key="RoleIsAssistantConverter"/>
     <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    <converters:ViewTypeEqualityConverter x:Key="ViewTypeEqualityConverter"/>
   </Application.Resources>
 </Application> 

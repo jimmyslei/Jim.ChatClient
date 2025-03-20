@@ -135,4 +135,25 @@ namespace chatClient.Converters
             throw new NotImplementedException();
         }
     }
+
+    public class ViewTypeEqualityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string viewType && parameter is string paramType)
+            {
+                return viewType == paramType;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool isEqual && isEqual && parameter is string paramType)
+            {
+                return paramType;
+            }
+            return string.Empty;
+        }
+    }
 }

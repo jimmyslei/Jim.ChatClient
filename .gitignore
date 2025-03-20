@@ -1,4 +1,5 @@
 
-bin/*
-obj/*
-Services/知识库.md
+.vs/*
+src/chatClient/bin/*
+src/chatClient/obj/*
+src/chatClient/Services/知识库.md

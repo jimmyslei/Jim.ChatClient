@@ -1,0 +1,30 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- 对话框容器样式 -->
+    <Style Selector="Border.DialogContainer">
+        <Setter Property="Background" Value="{DynamicResource SemiColorBackgroundSecondary}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorderSecondary}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="MaxWidth" Value="500"/>
+        <Setter Property="BoxShadow" Value="0 4 12 0 #20000000"/>
+    </Style>
+    
+    <!-- 对话框标题样式 -->
+    <Style Selector="TextBlock.DialogTitle">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+        <Setter Property="Foreground" Value="{DynamicResource SemiColorTextPrimary}"/>
+    </Style>
+    
+    <!-- 对话框按钮容器样式 -->
+    <Style Selector="StackPanel.DialogButtons">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="0,20,0,0"/>
+        <Setter Property="Spacing" Value="10"/>
+    </Style>
+</Styles> 
