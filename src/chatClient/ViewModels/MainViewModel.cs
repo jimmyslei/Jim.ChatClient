@@ -155,8 +155,13 @@ namespace chatClient.ViewModels
             ScrollToEnd?.Invoke(this, EventArgs.Empty);
         }
 
+        [ObservableProperty]
+        private TranslateViewModel _translateViewModel;
         public MainViewModel()
         {
+            // 初始化翻译视图模型
+            _translateViewModel = new TranslateViewModel();
+
             _chatService = new ChatService();
             _databaseService = new DatabaseService();
             _knowledgeBaseService = new KnowledgeBaseService(new AIModel

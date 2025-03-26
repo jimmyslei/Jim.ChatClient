@@ -23,10 +23,11 @@ using System.Reflection;
 using Newtonsoft.Json;
 using System.ClientModel.Primitives;
 using System.Text.Json.Nodes;
+using chatClient.IServices;
 
 namespace chatClient.Services
 {
-    public class ChatService
+    public class ChatService: IChatService
     {
         private readonly HttpClient _httpClient;
         private readonly DatabaseService _dbService;
@@ -737,5 +738,68 @@ namespace chatClient.Services
                 await _dbService.UpdateMessageSessionIdAsync(chatSessionId.ToString());
             }
         }
+
+        public async IAsyncEnumerable<string> TranslateMessageAsync(
+           string lan,
+           AIModel model,
+           string originalContext)
+        {
+            var content = """
+                                {{$input}}
+
+                                你是一个专业的翻译助手,将上面的输入翻译成{{$language}}，无需任何其他内容
+                                """;
+
+            // 用于收集AI完整回复
+            var aiResponse = new StringBuilder();
+
+            // 根据模型类型选择不同的处理方式
+            // 创建 OpenAI 内核
+            var builder = Kernel.CreateBuilder();
+
+            // 根据模型类型添加不同的服务
+            if (model.Id.Contains("gpt"))
+            {
+                builder.AddOpenAIChatCompletion(
+                    modelId: model.Id,
+                    apiKey: model.ApiKey);
+            }
+            else
+            {
+                var httpClient = new HttpClient(new AiHttpClientHandler(model.ApiEndpoint));
+
+                // 添加详细的请求头，确保与 OpenAI API 兼容
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // 使用完整配置的 HttpClient
+                builder.AddOpenAIChatCompletion(
+                    modelId: model.Id,
+                    apiKey: model.ApiKey,
+                    httpClient: httpClient);
+            }
+
+            var kernel = builder.Build();
+
+            // 获取聊天服务
+            await foreach (var update in kernel.InvokePromptStreamingAsync(
+               content, new() { ["input"] = originalContext, ["language"] = lan }))
+            {
+                if (string.IsNullOrEmpty(update.ToString()))
+                {
+                    var jsonContent = JsonNode.Parse(ModelReaderWriter.Write(update.InnerContent!));
+                    var choices = jsonContent!["choices"];
+                    if (choices.ToString() != "[]")
+                    {
+                        var reasoningUpdate = jsonContent!["choices"]![0]!["delta"]!["reasoning_content"];
+
+                        if (reasoningUpdate != null)
+                            yield return reasoningUpdate.ToString();
+                    }
+                }
+                else yield return update.ToString();
+            }
+
+        }
+
     }
 }

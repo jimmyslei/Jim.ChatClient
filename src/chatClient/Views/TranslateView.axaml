@@ -1,0 +1,158 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:chatClient.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="chatClient.Views.TranslateView"
+             x:DataType="vm:TranslateViewModel">
+  <Design.DataContext>
+    <vm:TranslateViewModel />
+  </Design.DataContext>
+  <Grid Margin="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- 标题 -->
+    <TextBlock Grid.Row="0" 
+               Text="AI 翻译助手" 
+               FontSize="24" 
+               FontWeight="Bold" 
+               Margin="0,0,0,20"/>
+
+    <!-- 主要内容区域 -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto,*">
+      <!-- 左侧输入区域 -->
+      <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+          <TextBlock Grid.Column="0" 
+                     Text="源文本" 
+                     FontSize="16" 
+                     FontWeight="SemiBold" 
+                     VerticalAlignment="Center"/>
+          
+          <ComboBox Grid.Column="1" 
+                    Width="120"
+                    SelectedIndex="{Binding SourceLanguageIndex}"
+                    ItemsSource="{Binding AvailableLanguages}"/>
+        </Grid>
+        
+        <Border Grid.Row="1" 
+                BorderBrush="#CCCCCC" 
+                BorderThickness="1" 
+                CornerRadius="8"
+                Margin="0,0,0,10">
+          <TextBox Text="{Binding SourceText}" 
+                   Watermark="请输入需要翻译的文本..." 
+                   AcceptsReturn="True" 
+                   TextWrapping="Wrap"
+                   BorderThickness="0"
+                   Padding="10"/>
+        </Border>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
+          <Button Content="清空" 
+                  Command="{Binding ClearTranslationCommand}"
+                  Padding="15,8"
+                  Background="#F0F0F0"
+                  Foreground="Black"
+                  CornerRadius="4"/>
+          
+          <Button Content="上传文件" 
+                  Command="{Binding UploadFileForTranslationCommand}"
+                  Padding="15,8"
+                  Background="#F0F0F0"
+                  Foreground="Black"
+                  CornerRadius="4"/>
+        </StackPanel>
+      </Grid>
+      
+      <!-- 中间控制区域 -->
+      <StackPanel Grid.Column="1" 
+                  VerticalAlignment="Center" 
+                  HorizontalAlignment="Center" 
+                  Margin="20,0">
+        <Button Command="{Binding SwapLanguagesCommand}"
+                Background="Transparent"
+                Padding="10"
+                Margin="0,0,0,10">
+          <PathIcon Data="M9,3L5,7H8V14H10V7H13M16,17V10H14V17H11L15,21L19,17H16Z" 
+                    Width="24" 
+                    Height="24"/>
+        </Button>
+        
+        <Button Content="翻译" 
+                Command="{Binding TranslateCommand}"
+                Padding="20,10"
+                Background="#4285F4"
+                Foreground="White"
+                CornerRadius="8"/>
+      </StackPanel>
+      
+      <!-- 右侧输出区域 -->
+      <Grid Grid.Column="2" RowDefinitions="Auto,*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+          <TextBlock Grid.Column="0" 
+                     Text="目标文本" 
+                     FontSize="16" 
+                     FontWeight="SemiBold" 
+                     VerticalAlignment="Center"/>
+          
+          <ComboBox Grid.Column="1" 
+                    Width="120"
+                    SelectedIndex="{Binding TargetLanguageIndex}"
+                    ItemsSource="{Binding AvailableLanguages}"/>
+        </Grid>
+        
+        <Border Grid.Row="1" 
+                BorderBrush="#CCCCCC" 
+                BorderThickness="1" 
+                CornerRadius="8"
+                Margin="0,0,0,10">
+          <TextBox Text="{Binding TranslatedText}" 
+                   IsReadOnly="True"
+                   AcceptsReturn="True" 
+                   TextWrapping="Wrap"
+                   BorderThickness="0"
+                   Padding="10"/>
+        </Border>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
+          <Button Content="复制" 
+                  Command="{Binding CopyTranslatedTextCommand}"
+                  Padding="15,8"
+                  Background="#F0F0F0"
+                  Foreground="Black"
+                  CornerRadius="4"/>
+          
+          <Button Content="导出" 
+                  Command="{Binding ExportTranslatedTextCommand}"
+                  Padding="15,8"
+                  Background="#F0F0F0"
+                  Foreground="Black"
+                  CornerRadius="4"/>
+        </StackPanel>
+      </Grid>
+    </Grid>
+    
+    <!-- 加载指示器 -->
+    <Border Grid.Row="1" 
+            Background="#80000000" 
+            IsVisible="{Binding IsTranslating}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+      <StackPanel HorizontalAlignment="Center" 
+                  VerticalAlignment="Center">
+        <ProgressBar IsIndeterminate="True" 
+                     Width="100" 
+                     Height="4" 
+                     Margin="0,0,0,10"/>
+        <TextBlock Text="正在翻译..." 
+                   Foreground="White" 
+                   HorizontalAlignment="Center"/>
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl> 

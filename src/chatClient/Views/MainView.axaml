@@ -369,11 +369,7 @@
     
     <!-- 翻译视图 -->
     <Grid Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding CurrentView, Converter={StaticResource ViewTypeEqualityConverter}, ConverterParameter=Translate}">
-      <TextBlock Text="翻译功能正在开发中..." 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center" 
-                 FontSize="20" 
-                 Foreground="#888888"/>
+      <views:TranslateView Background="#FF353535" DataContext="{Binding TranslateViewModel}" />
     </Grid>
     
     <!-- 设置视图 -->
