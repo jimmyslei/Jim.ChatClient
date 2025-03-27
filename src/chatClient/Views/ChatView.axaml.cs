@@ -34,14 +34,7 @@ namespace chatClient.Views
         
         private void ChatView_DataContextChanged(object sender, EventArgs e)
         {
-            // 取消订阅旧ViewModel的事件（如果有）
-            if (this.DataContext is MainViewModel oldViewModel)
-            {
-                oldViewModel.ScrollToEnd -= ViewModel_ScrollToEnd;
-                oldViewModel.CopyToClipboardRequested -= ViewModel_CopyToClipboardRequested;
-            }
-            
-            // 订阅新ViewModel的事件
+            // 订阅ViewModel的事件
             if (this.DataContext is MainViewModel viewModel)
             {
                 // 订阅滚动事件

@@ -10,6 +10,9 @@ using Avalonia.Platform.Storage;
 using chatClient.Helpers;
 using static chatClient.Services.DocumentProcessingService;
 using DocumentFormat.OpenXml.Packaging;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
 namespace chatClient.Services
 {
@@ -589,33 +592,36 @@ namespace chatClient.Services
             
             return text.ToString();
         }
-        
-        // 使用 iTextSharp 提取 PDF 内容
+
+        // 使用 itext7 提取 PDF 内容
         private string ExtractTextFromPdf(string filePath)
         {
-            // 需要添加 NuGet 包: iTextSharp 或 itext7
+            // 使用 itext7
             StringBuilder text = new StringBuilder();
-            
-            // 使用 iTextSharp
-            using (var reader = new iTextSharp.text.pdf.PdfReader(filePath))
+
+            using (var pdfReader = new PdfReader(filePath))
+            using (var pdfDocument = new PdfDocument(pdfReader))
             {
-                for (int page = 1; page <= reader.NumberOfPages; page++)
+                int numberOfPages = pdfDocument.GetNumberOfPages();
+                for (int i = 1; i <= numberOfPages; i++)
                 {
-                    iTextSharp.text.pdf.parser.ITextExtractionStrategy strategy = 
-                        new iTextSharp.text.pdf.parser.SimpleTextExtractionStrategy();
-                    
-                    string currentText = iTextSharp.text.pdf.parser.PdfTextExtractor.GetTextFromPage(
-                        reader, page, strategy);
-                    
-                    text.AppendLine($"--- 页面 {page} ---");
+                    text.AppendLine($"--- 页面 {i} ---");
+
+                    // 获取页面
+                    var page = pdfDocument.GetPage(i);
+
+                    // 提取文本
+                    var strategy = new LocationTextExtractionStrategy();
+                    string currentText = PdfTextExtractor.GetTextFromPage(page, strategy);
+
                     text.AppendLine(currentText);
                     text.AppendLine();
                 }
             }
-            
+
             return text.ToString();
         }
-        
+
         // 检测文件编码
         private Encoding DetectFileEncoding(string filePath)
         {
