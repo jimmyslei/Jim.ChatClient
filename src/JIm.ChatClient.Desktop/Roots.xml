@@ -1,0 +1,6 @@
+<linker>
+	<assembly fullname="JIm.ChatClient.Desktop" preserve="All" />
+  <!--<assembly fullname="JIm.ChatClient.Core" preserve="All" />
+  <assembly fullname="System.Text.Json" preserve="All" />-->
+	
+</linker>

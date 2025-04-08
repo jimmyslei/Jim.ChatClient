@@ -1,0 +1,21 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="using:JIm.ChatClient.Core.Converters"
+             x:Class="JIm.ChatClient.Core.App">
+  <Application.Styles>
+    <FluentTheme />
+		<!--<StyleInclude Source="avares://MarkdownAIRender/Index.axaml" />-->
+  </Application.Styles>
+  
+  <Application.Resources>
+    <converters:RoleToBackgroundConverter x:Key="RoleToBackgroundConverter"/>
+    <converters:RoleToAvatarBackgroundConverter x:Key="RoleToAvatarBackgroundConverter"/>
+    <converters:RoleToAvatarTextConverter x:Key="RoleToAvatarTextConverter"/>
+    <converters:RoleToDisplayNameConverter x:Key="RoleToDisplayNameConverter"/>
+    <converters:RoleIsAssistantConverter x:Key="RoleIsAssistantConverter"/>
+    <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    <converters:ViewTypeEqualityConverter x:Key="ViewTypeEqualityConverter"/>
+    <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
+    
+  </Application.Resources>
+</Application> 

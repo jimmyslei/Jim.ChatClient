@@ -1,0 +1,153 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="using:JIm.ChatClient.Core.Views"
+             xmlns:vm="using:JIm.ChatClient.Core.ViewModels"
+             mc:Ignorable="d"
+             x:Class="JIm.ChatClient.Core.Views.SettingsView">
+
+    <Design.DataContext>
+        <vm:MainViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <!-- 菜单项样式 -->
+        <Style Selector="Button.MenuButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        
+        <!-- 选中状态样式 -->
+        <Style Selector="Button.MenuButton:pressed">
+            <Setter Property="Background" Value="#454545"/>
+        </Style>
+        
+        <Style Selector="Button.MenuButton.Selected">
+            <Setter Property="Background" Value="#454545"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid ColumnDefinitions="200,*">
+        <!-- 左侧导航菜单 -->
+        <Border Grid.Column="0" 
+                Background="#2D2D2D" 
+                Padding="10">
+            <StackPanel Spacing="5">
+                <!--<TextBlock Text="设置" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           Margin="0,0,0,20"
+                           Foreground="White"/>-->
+                
+                <Button Content="模型管理" 
+                        Classes="MenuButton Selected"
+                        Name="ModelSettings"
+                        Click="OnMenuButtonClick"/>
+                
+                <!--<Button Content="知识库设置" 
+                        Classes="MenuButton"
+                        Name="KnowledgeBaseSettings"
+                        Click="OnMenuButtonClick"/>
+                
+                <Button Content="界面设置" 
+                        Classes="MenuButton"
+                        Name="UISettings"
+                        Click="OnMenuButtonClick"/>-->
+                
+                <Button Content="关于" 
+                        Classes="MenuButton"
+                        Name="About"
+                        Click="OnMenuButtonClick"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- 右侧内容区域 -->
+        <Border Grid.Column="1" 
+                Background="#353535" 
+                Padding="20">
+            <Grid>
+                <!-- 模型管理 -->
+                <views:ModelSettingsView DataContext="{Binding ModelSettingsViewModel}"
+                                         Name="ModelSettingsView"/>
+                
+                <!-- 知识库设置 -->
+                <Grid Name="KnowledgeBaseSettingsView" IsVisible="False">
+                    <TextBlock Text="知识库设置（待实现）" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center"
+                               Foreground="White"
+                               FontSize="16"/>
+                </Grid>
+                
+                <!-- 界面设置 -->
+                <Grid Name="UISettingsView" IsVisible="False">
+                    <TextBlock Text="界面设置（待实现）" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center"
+                               Foreground="White"
+                               FontSize="16"/>
+                </Grid>
+                
+                <!-- 关于 -->
+                <Grid Name="AboutView" IsVisible="False">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Margin="20" 
+                                Spacing="15">
+                        <!-- Logo图标 -->
+                        <Image Source="/Assets/JimAI.ico" 
+                               Width="80" 
+                               Height="80" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,10"/>
+                        
+                        <TextBlock Text="JimAI 聊天客户端" 
+                                   FontSize="24" 
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Text="版本: 1.0.0"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Text="© 2025 JimAI Team"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,10,0,0"/>
+                        <!-- GitHub链接 -->
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Center" 
+                                    Margin="0,20,0,0"
+                                    Spacing="10">
+                            <Button Background="Transparent" 
+                                    BorderThickness="0"
+                                    Padding="5"
+                                    Click="OnGitHubLinkClick">
+                                <Viewbox Width="30" Height="30">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Fill="White" 
+                                              Data="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                            <TextBlock Text="项目源码" 
+                                    Foreground="#4285F4" 
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    PointerPressed="OnGitHubLinkClick"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

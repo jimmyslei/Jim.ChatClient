@@ -1,0 +1,118 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:JIm.ChatClient.Core.ViewModels"
+             xmlns:converters="using:JIm.ChatClient.Core.Converters"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             x:Class="JIm.ChatClient.Core.Views.KnowledgeBaseView">
+
+    <UserControl.Resources>
+        <converters:FileTypeToIconConverter x:Key="FileTypeToIconConverter"/>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- 知识库控制面板 -->
+        <StackPanel Grid.Row="0" Spacing="10" Margin="10">
+            <!--<CheckBox IsChecked="{Binding IsKnowledgeBaseEnabled}" Content="启用知识库" />-->
+            
+            <Grid ColumnDefinitions="*,Auto">
+                <ComboBox Grid.Column="0" 
+                          ItemsSource="{Binding KnowledgeBases}"
+                          SelectedItem="{Binding SelectedKnowledgeBase}"
+                          DisplayMemberBinding="{Binding Name}"
+                          HorizontalAlignment="Stretch" />
+                
+                <Button Grid.Column="1" 
+                        Command="{Binding CreateKnowledgeBaseDialogCommand}"
+                        Content="+" 
+                        ToolTip.Tip="创建新知识库"
+                        Margin="5,0,0,0" />
+            </Grid>
+            
+            <Button Command="{Binding UploadDocumentToKnowledgeBaseCommand}"
+                    Content="上传文档到知识库"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="{Binding !!SelectedKnowledgeBase}" />
+                    
+            <!-- 上传进度条 -->
+            <ProgressBar Value="{Binding DocumentUploadProgress}" 
+                         IsVisible="{Binding IsUploadingDocument}"
+                         Minimum="0" Maximum="1" Height="4" />
+        </StackPanel>
+        
+        <!-- 知识库文档列表 -->
+        <StackPanel Grid.Row="1" Margin="10,0,10,10" IsEnabled="{Binding IsKnowledgeBaseEnabled}">
+            <Border Background="#10FFFFFF" CornerRadius="4" Padding="10" Margin="0,0,0,10"
+                    IsVisible="{Binding !!SelectedKnowledgeBase}">
+                <Grid ColumnDefinitions="*,*,*">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="文档数" FontSize="12" Opacity="0.7"/>
+                        <TextBlock Text="{Binding SelectedKnowledgeBase.DocumentCount}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="总块数" FontSize="12" Opacity="0.7"/>
+                        <TextBlock Text="{Binding SelectedKnowledgeBase.TotalChunks}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="总大小" FontSize="12" Opacity="0.7"/>
+                        <TextBlock Text="{Binding SelectedKnowledgeBase.TotalSize}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            
+            <ScrollViewer Margin="10">
+                <ItemsControl ItemsSource="{Binding SelectedKnowledgeBase.Documents}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#20FFFFFF" BorderThickness="0,0,0,1" Padding="0,5">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <TextBlock Grid.Column="0" 
+                                               Text="{Binding FileType, Converter={StaticResource FileTypeToIconConverter}}" 
+                                               FontSize="20" 
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,10,0"/>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" />
+                                        <StackPanel Orientation="Horizontal" Spacing="10" Opacity="0.7">
+                                            <TextBlock Text="{Binding FormattedSize}" FontSize="11" />
+                                            <TextBlock Text="{Binding ChunkCount, StringFormat='{}块数: {0}'}" FontSize="11" />
+                                            <TextBlock Text="{Binding UploadedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" FontSize="11" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button Grid.Column="2" 
+                                            Command="{Binding $parent[ItemsControl].DataContext.RemoveDocumentFromKnowledgeBaseCommand}" 
+                                            CommandParameter="{Binding}"
+                                            Content="×" 
+                                            ToolTip.Tip="删除文档"
+                                            VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+        
+        <!-- 知识库高级设置 -->
+        <Expander Grid.Row="2" Header="高级设置" Margin="10" IsEnabled="{Binding IsKnowledgeBaseEnabled}">
+            <StackPanel Spacing="10" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="相关性阈值:" VerticalAlignment="Center" Width="100" />
+                    <Slider Value="{Binding RelevanceThreshold}" Minimum="0" Maximum="1" Width="150"
+                            TickFrequency="0.1" TickPlacement="BottomRight" />
+                    <TextBlock Text="{Binding RelevanceThreshold, StringFormat='{}{0:F1}'}" 
+                               VerticalAlignment="Center" Margin="10,0,0,0" />
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="上下文块数:" VerticalAlignment="Center" Width="100" />
+                    <Slider Value="{Binding MaxContextChunks}" Minimum="1" Maximum="10" Width="150"
+                            TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+                    <TextBlock Text="{Binding MaxContextChunks}" 
+                               VerticalAlignment="Center" Margin="10,0,0,0" />
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+    </Grid>
+</UserControl> 

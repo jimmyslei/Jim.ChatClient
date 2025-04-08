@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:JIm.ChatClient.Core.ViewModels"
+             x:Class="JIm.ChatClient.Core.Views.ModelSettingsView">
+  <Design.DataContext>
+    <vm:ModelSettingsViewModel/>
+  </Design.DataContext>
+
+  <Grid RowDefinitions="Auto,*">
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+      <Button Content="添加模型" Command="{Binding AddNewModelCommand}" Margin="0,0,10,0"/>
+    </StackPanel>
+
+    <DataGrid Grid.Row="1"
+              ItemsSource="{Binding Models}"
+              SelectedItem="{Binding SelectedModel}"
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              Margin="10">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="类型" Binding="{Binding Type}" Width="80"/>
+        <DataGridTextColumn Header="模型ID" Binding="{Binding ModelId}" Width="150"/>
+        <DataGridTextColumn Header="显示名称" Binding="{Binding DisplayName}" Width="150"/>
+        <DataGridTextColumn Header="API端点" Binding="{Binding ApiEndpoint}" Width="200"/>
+        <DataGridTemplateColumn Header="默认" Width="60">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <CheckBox IsChecked="{Binding IsDefault}" IsEnabled="False" HorizontalAlignment="Center"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="操作" Width="200">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="编辑"
+                        Command="{Binding DataContext.EditModelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                        CommandParameter="{Binding}"
+                        Margin="2"/>
+                <Button Content="删除"
+                        Command="{Binding DataContext.DeleteModelAsyncCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                        CommandParameter="{Binding}"
+                        Margin="2"
+                        IsEnabled="{Binding !IsDefault}"/>
+                <Button Content="设为默认"
+                        Command="{Binding DataContext.SetAsDefaultAsyncCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                        CommandParameter="{Binding}"
+                        Margin="2"
+                        IsEnabled="{Binding !IsDefault}"/>
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- 编辑对话框 -->
+    <Grid Grid.Row="0" Grid.RowSpan="2"
+          IsVisible="{Binding IsEditDialogOpen}"
+          Background="#80000000">
+      <Border CornerRadius="5"
+              Width="400"
+              Padding="20">
+        <Grid RowDefinitions="Auto,*,Auto">
+          <TextBlock Grid.Row="0"
+                     Text="{Binding IsNewModel, Converter={StaticResource BoolToStringConverter}, ConverterParameter='添加新模型|编辑模型'}"
+                     FontSize="18"
+                     Margin="0,0,0,20"/>
+
+          <StackPanel Grid.Row="1" Spacing="10">
+            <ComboBox SelectedItem="{Binding EditingModel.Type}"
+                      Width="200"
+                      HorizontalAlignment="Left">
+              <ComboBoxItem Content="local"/>
+              <ComboBoxItem Content="online"/>
+              <ComboBoxItem Content="weather"/>
+            </ComboBox>
+
+            <TextBox Text="{Binding EditingModel.ModelId}"
+                     Watermark="模型ID"
+                     Width="350"
+                     HorizontalAlignment="Left"/>
+
+            <TextBox Text="{Binding EditingModel.DisplayName}"
+                     Watermark="显示名称"
+                     Width="350"
+                     HorizontalAlignment="Left"/>
+
+            <TextBox Text="{Binding EditingModel.ApiEndpoint}"
+                     Watermark="API端点"
+                     Width="350"
+                     HorizontalAlignment="Left"/>
+
+            <TextBox Text="{Binding EditingModel.ApiKey}"
+                     Watermark="API密钥"
+                     Width="350"
+                     HorizontalAlignment="Left"/>
+
+            <CheckBox Content="设为默认模型"
+                      IsChecked="{Binding EditingModel.IsDefault}"/>
+          </StackPanel>
+
+          <StackPanel Grid.Row="2"
+                      Orientation="Horizontal"
+                      HorizontalAlignment="Right"
+                      Margin="0,20,0,0">
+            <Button Content="取消"
+                    Command="{Binding CancelEditCommand}"
+                    Margin="0,0,10,0"/>
+            <Button Content="保存"
+                    Command="{Binding SaveModelAsyncCommand}"/>
+          </StackPanel>
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

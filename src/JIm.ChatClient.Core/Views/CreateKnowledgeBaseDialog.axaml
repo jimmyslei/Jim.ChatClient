@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+        Width="400" Height="280"
+        x:Class="JIm.ChatClient.Core.Views.CreateKnowledgeBaseDialog"
+        Title="创建知识库"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="20">
+        <TextBlock Grid.Row="0" Text="知识库名称:" Margin="0,0,0,5" />
+        <TextBox Grid.Row="1" Text="{Binding NewKnowledgeBaseName}" Margin="0,0,0,10" />
+        
+        <TextBlock Grid.Row="2" Text="描述:" Margin="0,0,0,5" VerticalAlignment="Top" />
+        <TextBox Grid.Row="3" Text="{Binding NewKnowledgeBaseDescription}" 
+                 AcceptsReturn="True" TextWrapping="Wrap" Height="100" />
+        
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <!-- <Button Content="取消" Margin="0,0,10,0" /> -->
+            <Button Content="创建" Command="{Binding CreateKnowledgeBaseCommand}" 
+                    IsEnabled="{Binding !!NewKnowledgeBaseName}" />
+        </StackPanel>
+    </Grid>
+</Window> 
