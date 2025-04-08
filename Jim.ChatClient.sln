@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chatClient", "src\chatClient\chatClient.csproj", "{A3B7ACF6-927C-4590-9C4F-56D78B3A21FA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JIm.ChatClient.Core", "src\JIm.ChatClient.Core\JIm.ChatClient.Core.csproj", "{87B66164-9BB0-4B73-A196-0D589FAF6467}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JIm.ChatClient.Desktop", "src\JIm.ChatClient.Desktop\JIm.ChatClient.Desktop.csproj", "{C3DE00AA-B1A9-49CA-9064-99EBEC2CB8FE}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A3B7ACF6-927C-4590-9C4F-56D78B3A21FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3B7ACF6-927C-4590-9C4F-56D78B3A21FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3B7ACF6-927C-4590-9C4F-56D78B3A21FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3B7ACF6-927C-4590-9C4F-56D78B3A21FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87B66164-9BB0-4B73-A196-0D589FAF6467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87B66164-9BB0-4B73-A196-0D589FAF6467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87B66164-9BB0-4B73-A196-0D589FAF6467}.Release|Any CPU.ActiveCfg = Release|Any CPU

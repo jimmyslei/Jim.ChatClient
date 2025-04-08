@@ -7,3 +7,4 @@ src/chatClient/Services/知识库.md
 /src/JIm.ChatClient.Desktop/bin/*
 /src/JIm.ChatClient.Desktop/obj/*
 /src/JIm.ChatClient.Core/obj/*
+/chatClient
