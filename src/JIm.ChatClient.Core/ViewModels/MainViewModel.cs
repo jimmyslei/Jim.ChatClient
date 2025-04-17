@@ -162,6 +162,10 @@ namespace JIm.ChatClient.Core.ViewModels
         [ObservableProperty]
         private ModelSettingsViewModel _modelSettingsViewModel;
 
+        // 添加工具视图模型属性
+        [ObservableProperty]
+        private ToolsViewModel _toolsViewModel;
+
         public MainViewModel()
         {
             _chatService = new ChatService();
@@ -170,6 +174,8 @@ namespace JIm.ChatClient.Core.ViewModels
             _translateViewModel = new TranslateViewModel(_chatService);
             // 初始化模型设置视图模型
             _modelSettingsViewModel = new ModelSettingsViewModel(_databaseService);
+            // 初始化工具视图模型
+            _toolsViewModel = new ToolsViewModel();
             
             _knowledgeBaseService = new KnowledgeBaseService(new AIModel
             {

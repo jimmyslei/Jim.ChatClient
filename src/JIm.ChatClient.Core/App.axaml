@@ -16,6 +16,9 @@
     <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
     <converters:ViewTypeEqualityConverter x:Key="ViewTypeEqualityConverter"/>
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
-    
+
+    <converters:ToolItemEqualityConverter x:Key="EqualityConverter"/>
+    <converters:SelectedBorderConverter x:Key="SelectedBorderConverter"/>
+    <converters:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
   </Application.Resources>
 </Application> 

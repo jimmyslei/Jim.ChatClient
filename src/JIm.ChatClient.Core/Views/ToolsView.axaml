@@ -1,0 +1,181 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:JIm.ChatClient.Core.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="JIm.ChatClient.Core.Views.ToolsView"
+             x:DataType="vm:ToolsViewModel">
+  
+  <Grid ColumnDefinitions="250,*" Background="#FF353535">
+    <!-- 左侧工具列表 -->
+    <Border Grid.Column="0" BorderBrush="#444444" BorderThickness="0,0,1,0">
+      <Grid RowDefinitions="Auto,*">
+        <TextBlock Grid.Row="0" Text="工具箱" FontSize="20" Margin="15" Foreground="White"/>
+        
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+          <ItemsControl ItemsSource="{Binding ToolItems}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Margin="10,5" 
+                       Padding="10" 
+                       Width="230"
+                       CornerRadius="5" 
+                       Background="{Binding IsSelected, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='#47929292,#2D2D2D'}"
+                       BorderThickness="1"
+                       BorderBrush="{Binding IsSelected, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='#00D9D9D9,#444444'}"
+                       Command="{Binding DataContext.ToolSelectedCommand, 
+                                RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                       CommandParameter="{Binding}">
+                  <Button.Styles>
+                    <Style Selector="Button:pointerover">
+                      <Setter Property="Background" Value="{Binding IsSelected, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='#4776A8,#3D3D3D'}"/>
+                      <Setter Property="Cursor" Value="Hand"/>
+                    </Style>
+                    <Style Selector="Button">
+                      <Setter Property="Transitions">
+                        <Transitions>
+                          <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                          <BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+                        </Transitions>
+                      </Setter>
+                    </Style>
+                  </Button.Styles>
+                  
+                  <Grid ColumnDefinitions="Auto,*">
+                    <PathIcon Grid.Column="0" 
+                             Data="{Binding IconData}" 
+                             Width="24" 
+                             Height="24" 
+                             Margin="0,0,10,0"
+                             Foreground="White"/>
+                    
+                    <StackPanel Grid.Column="1">
+                      <TextBlock Text="{Binding Title}" 
+                               FontWeight="Bold" 
+                               Foreground="White"/>
+                      <TextBlock Text="{Binding Description}" 
+                               TextWrapping="Wrap"
+                               Margin="0,5,0,0"
+                               Foreground="#CCCCCC"
+                               FontSize="12"/>
+                    </StackPanel>
+                  </Grid>
+                </Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </Grid>
+    </Border>
+    
+    <!-- 右侧工具操作区 -->
+    <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" Margin="20">
+      <!-- 工具标题和描述 -->
+      <StackPanel Grid.Row="0" Margin="0,0,0,20">
+        <TextBlock Text="{Binding SelectedTool.Title, FallbackValue='请选择一个工具'}" 
+                 FontSize="24" 
+                 FontWeight="Bold"
+                 Foreground="White"/>
+        <TextBlock Text="{Binding SelectedTool.Description, FallbackValue='从左侧选择一个工具开始操作'}" 
+                 Margin="0,5,0,0"
+                 Foreground="#CCCCCC"/>
+      </StackPanel>
+      
+      <!-- 工具操作区 -->
+      <Border Grid.Row="1" 
+              Background="#2D2D2D" 
+              CornerRadius="5" 
+              Padding="20"
+              IsVisible="{Binding SelectedTool, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+          <!-- 文件选择 -->
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,15">
+            <TextBox Grid.Column="0" 
+                    Text="{Binding SelectedFilePath}" 
+                    Watermark="选择要处理的文件..." 
+                    IsReadOnly="True"
+                    Margin="0,0,10,0"/>
+            <Button Grid.Column="1" 
+                    Content="浏览..." 
+                    Command="{Binding SelectFileCommand}"/>
+          </Grid>
+          
+          <!-- 状态信息 -->
+          <TextBlock Grid.Row="1" 
+                     Text="{Binding StatusMessage, FallbackValue='等待操作...'}" 
+                     Margin="0,0,0,10"
+                     Foreground="#CCCCCC"/>
+          
+          <!-- 进度条 -->
+          <ProgressBar Grid.Row="2" 
+                       Value="{Binding ProcessProgress}" 
+                       IsVisible="{Binding IsProcessing}"
+                       Margin="0,0,0,10"/>
+          
+          <!-- 结果区域 -->
+          <Border Grid.Row="3" 
+                  BorderBrush="#444444" 
+                  BorderThickness="1" 
+                  CornerRadius="3" 
+                  Padding="10"
+                  Margin="0,10,0,10"
+                  IsVisible="{Binding OutputFilePath, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <Grid RowDefinitions="Auto,*">
+              <TextBlock Grid.Row="0" 
+                         Text="处理结果:" 
+                         FontWeight="Bold" 
+                         Margin="0,0,0,5"
+                         Foreground="White"/>
+              <TextBlock Grid.Row="1" 
+                         Text="{Binding OutputFilePath}" 
+                         TextWrapping="Wrap"
+                         Foreground="#CCCCCC"/>
+            </Grid>
+          </Border>
+          
+          <!-- 操作按钮 -->
+          <Button Grid.Row="4" 
+                  Content="开始处理" 
+                  HorizontalAlignment="Center" 
+                  Command="{Binding ProcessFileCommand}"
+                  IsEnabled="{Binding SelectedFilePath, Converter={x:Static ObjectConverters.IsNotNull}}"
+                  Width="150"/>
+        </Grid>
+      </Border>
+      
+      <!-- 工具未选择时显示的提示 -->
+      <Border Grid.Row="1" 
+              Background="#2D2D2D" 
+              CornerRadius="5" 
+              Padding="20"
+              IsVisible="{Binding SelectedTool, Converter={x:Static ObjectConverters.IsNull}}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+          <PathIcon Data="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
+                    Width="48" 
+                    Height="48"
+                    Foreground="#CCCCCC"/>
+          <TextBlock Text="请从左侧选择一个工具" 
+                     HorizontalAlignment="Center" 
+                     Margin="0,20,0,0"
+                     Foreground="#CCCCCC"
+                     FontSize="16"/>
+        </StackPanel>
+      </Border>
+      
+      <!-- 底部提示 -->
+      <TextBlock Grid.Row="2" 
+                 Text="工具处理完成后，文件将保存到原始文件同一目录下" 
+                 HorizontalAlignment="Center"
+                 Margin="0,20,0,0"
+                 Foreground="#888888"
+                 FontSize="12"/>
+    </Grid>
+  </Grid>
+  
+  <!-- <UserControl.Resources>
+    <vm:ToolItemEqualityConverter x:Key="EqualityConverter"/>
+    <vm:SelectedBorderConverter x:Key="SelectedBorderConverter"/>
+  </UserControl.Resources> -->
+  
+</UserControl> 

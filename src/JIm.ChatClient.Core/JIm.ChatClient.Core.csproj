@@ -42,6 +42,9 @@
     <PackageReference Include="RestSharp" Version="112.1.1-alpha.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Semi.Avalonia" Version="11.2.1.5" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
+    <PackageReference Include="itext7" Version="8.0.1" />
+    <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +71,10 @@
     <Compile Update="Views\MainView.axaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ToolsView.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Views\TranslateView.axaml.cs">
       <SubType>Code</SubType>
@@ -98,6 +105,9 @@
       <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Views\MainView.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Views\ToolsView.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Views\TranslateView.axaml">
